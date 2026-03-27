@@ -32,13 +32,12 @@ Widget::~Widget()
     delete ui;
 }
 
-// ==================== 【修改】通用函数：后台执行SSH（强制source环境）====================
+// ==================== 通用函数：后台执行SSH（强制source环境）====================
 void Widget::runSSHCommand(const QString &cmd)
 {
-    // 【关键修复】在命令前强制加上 source ROS2 环境
     QString fullCmd = QString(
-        "source /opt/ros/%1/setup.bash && source %2/install/setup.bash && %3"
-    ).arg(ROS2_DISTRO).arg(WS_PATH).arg(cmd);
+        "cd %1 && source /opt/ros/%2/setup.bash && source install/setup.bash && %3"
+    ).arg(WS_PATH).arg(ROS2_DISTRO).arg(cmd);
 
     QString program = "ssh";
     QStringList args;
@@ -50,15 +49,14 @@ void Widget::runSSHCommand(const QString &cmd)
 void Widget::runSSHInTerminal(const QString &cmd)
 {
     QString sshInnerCmd = QString(
-        "source /opt/ros/%1/setup.bash && source %2/install/setup.bash && %3; exec bash"
-    ).arg(ROS2_DISTRO).arg(WS_PATH).arg(cmd);
+        "cd %1 && source /opt/ros/%2/setup.bash && source install/setup.bash && %3; exec bash"
+    ).arg(WS_PATH).arg(ROS2_DISTRO).arg(cmd);
 
     QString gnomeCmd = QString("ssh -t %1@%2 \"%3\"").arg(PI_USER).arg(PI_IP).arg(sshInnerCmd);
 
     QString program = "gnome-terminal";
     QStringList args;
     args << "--" << "bash" << "-c" << gnomeCmd;
-
     QProcess::startDetached(program, args);
 }
 
@@ -73,7 +71,6 @@ void Widget::startBringup()
 // ==================== 2. 停止机器人 ====================
 void Widget::stopRemoteProgram()
 {
-    // 停止命令不需要 source，直接发信号即可
     QString program = "ssh";
     QStringList args;
     args << QString("%1@%2").arg(PI_USER).arg(PI_IP) << "pkill -SIGINT -f 'ros2 launch'";
@@ -81,10 +78,14 @@ void Widget::stopRemoteProgram()
     ui->label->setText("状态：✅ 机器人已停止！");
 }
 
-// ==================== 3. 启动建图 ====================
+// ==================== 3. 启动建图（绝对路径，100%找到配置文件）=====================
 void Widget::startSLAM()
 {
-    QString cmd = "ros2 launch slam_toolbox online_async_launch.py slam_params_file:=src/fishbot_bringup/config/slam_toolbox.yaml use_sim_time:=False";
+    QString slam_file = WS_PATH + "/src/fishbot_bringup/config/slam_toolbox.yaml";
+    QString cmd = QString(
+        "ros2 launch slam_toolbox online_async_launch.py slam_params_file:=%1 use_sim_time:=False"
+    ).arg(slam_file);
+
     runSSHInTerminal(cmd);
     ui->label->setText("状态：✅ 建图已启动！");
 }
@@ -103,7 +104,7 @@ void Widget::saveMap()
     QString cmd = QString("mkdir -p %1 && ros2 run nav2_map_server map_saver_cli -t map -f %2")
                       .arg(MAP_SAVE_PATH.left(MAP_SAVE_PATH.lastIndexOf('/')))
                       .arg(MAP_SAVE_PATH);
-    runSSHCommand(cmd); // 这里会自动 source 环境
+    runSSHCommand(cmd);
     ui->label->setText("状态：✅ 地图已保存到 maps 文件夹！");
 }
 
@@ -119,7 +120,7 @@ void Widget::startNavigation()
 void Widget::startCleaning()
 {
     QString cmd = "ros2 topic pub --once /clean std_msgs/msg/Bool \"{data: true}\"";
-    runSSHCommand(cmd); // 这里会自动 source 环境
+    runSSHCommand(cmd);
     ui->label->setText("状态：✅ 扫地已开始！");
 }
 
@@ -127,19 +128,19 @@ void Widget::startCleaning()
 void Widget::stopCleaning()
 {
     QString cmd = "ros2 topic pub --once /clean std_msgs/msg/Bool \"{data: false}\"";
-    runSSHCommand(cmd); // 这里会自动 source 环境
+    runSSHCommand(cmd);
     ui->label->setText("状态：✅ 扫地已停止！");
 }
 
-// ==================== 9. 开始全覆盖清扫 ====================
+// ==================== 9. 全覆盖清扫 ====================
 void Widget::startFullCoverage()
 {
-    QString cmd = "ros2 run autosweeper_robot sweeper_node.py";
+    QString cmd = "ros2 run autosweeper_robot sweeper_node";
     runSSHInTerminal(cmd);
     ui->label->setText("状态：✅ 全覆盖清扫已启动！");
 }
 
-// ==================== 10. 在电脑本地打开 RViz2 ====================
+// ==================== 10. 打开 RViz2 ====================
 void Widget::openRviz2()
 {
     QString program = "bash";
