@@ -26,7 +26,10 @@ private slots:
     void startCleaning();          // 7. 开始扫地
     void stopCleaning();           // 8. 停止扫地
     void startFullCoverage();      // 9. 开始全覆盖清扫
-    void openRviz2();              // 10. 【新增】打开 RViz2
+    void startLineSweeping();      // 10. 新增：开始条带清扫
+    void startAlongEdgeSweeping(); // 11. 新增：开始沿边清扫
+    void startArchSweeping();      // 12. 新增：开始弓形清扫
+    void openRviz2();              // 13. 【新增】打开 RViz2
 
 private:
     Ui::Widget *ui;

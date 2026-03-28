@@ -1,5 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="i18n">
-<file alias="cleaning_robot_software_zh_CN.qm">/home/jerry/Auto_Sweeper_System/Qt5_software/build-cleaning_robot_software-unknown-Debug/.qm/cleaning_robot_software_zh_CN.qm</file>
+<file alias="cleaning_robot_software_zh_CN.qm">/home/jerry/AutoSweeperSystem/Qt5_software/ros2_uppercomputer_Qt5_software/build-cleaning_robot_software-unknown-Debug/.qm/cleaning_robot_software_zh_CN.qm</file>
 </qresource>
 </RCC>
