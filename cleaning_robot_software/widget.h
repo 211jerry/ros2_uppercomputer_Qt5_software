@@ -26,9 +26,7 @@ private slots:
     void startCleaning();          // 7. 开始扫地
     void stopCleaning();           // 8. 停止扫地
     void startFullCoverage();      // 9. 开始全覆盖清扫
-    void startLineSweeping();      // 10. 开始条带清扫
     void startAlongEdgeSweeping(); // 11. 开始沿边清扫
-    void startArchSweeping();      // 12. 开始弓形清扫
     void startCamera();            // 13. 启动摄像机
     void startRosBridge();         // 14. 启动安卓服务器(rosbridge)
     void openRviz2();              // 15. 打开 RViz2

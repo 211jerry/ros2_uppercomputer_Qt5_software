@@ -25,9 +25,7 @@ Widget::Widget(QWidget *parent)
     connect(ui->pushButton_7,  &QPushButton::clicked, this, &Widget::startCleaning);
     connect(ui->pushButton_8,  &QPushButton::clicked, this, &Widget::stopCleaning);
     connect(ui->pushButton_9,  &QPushButton::clicked, this, &Widget::startFullCoverage);
-    connect(ui->pushButton_11, &QPushButton::clicked, this, &Widget::startLineSweeping);
     connect(ui->pushButton_12, &QPushButton::clicked, this, &Widget::startAlongEdgeSweeping);
-    connect(ui->pushButton_13, &QPushButton::clicked, this, &Widget::startArchSweeping);
     connect(ui->pushButton_14, &QPushButton::clicked, this, &Widget::startCamera);
     connect(ui->pushButton_15, &QPushButton::clicked, this, &Widget::startRosBridge);
     connect(ui->pushButton_10, &QPushButton::clicked, this, &Widget::openRviz2);
@@ -146,13 +144,6 @@ void Widget::startFullCoverage()
     ui->label->setText("状态：✅ 全覆盖清扫已启动！");
 }
 
-// ==================== 10. 开始条带清扫 ====================
-void Widget::startLineSweeping()
-{
-    QString cmd = "ros2 run autosweeper_robot linesweeper";
-    runSSHInTerminal(cmd);
-    ui->label->setText("状态：✅ 条带清扫已启动！");
-}
 
 // ==================== 11. 开始沿边清扫 ====================
 void Widget::startAlongEdgeSweeping()
@@ -162,13 +153,6 @@ void Widget::startAlongEdgeSweeping()
     ui->label->setText("状态：✅ 沿边清扫已启动！");
 }
 
-// ==================== 12. 开始弓形清扫 ====================
-void Widget::startArchSweeping()
-{
-    QString cmd = "ros2 run autosweeper_robot archsweeper";
-    runSSHInTerminal(cmd);
-    ui->label->setText("状态：✅ 弓形清扫已启动！");
-}
 
 // ==================== 13. 启动摄像机 ====================
 void Widget::startCamera()
