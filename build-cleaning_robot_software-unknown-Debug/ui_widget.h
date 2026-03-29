@@ -34,6 +34,8 @@ public:
     QPushButton *pushButton_11;
     QPushButton *pushButton_12;
     QPushButton *pushButton_13;
+    QPushButton *pushButton_14;
+    QPushButton *pushButton_15;
 
     void setupUi(QWidget *Widget)
     {
@@ -83,6 +85,12 @@ public:
         pushButton_13 = new QPushButton(Widget);
         pushButton_13->setObjectName(QString::fromUtf8("pushButton_13"));
         pushButton_13->setGeometry(QRect(30, 570, 251, 131));
+        pushButton_14 = new QPushButton(Widget);
+        pushButton_14->setObjectName(QString::fromUtf8("pushButton_14"));
+        pushButton_14->setGeometry(QRect(450, 20, 231, 121));
+        pushButton_15 = new QPushButton(Widget);
+        pushButton_15->setObjectName(QString::fromUtf8("pushButton_15"));
+        pushButton_15->setGeometry(QRect(450, 180, 231, 121));
 
         retranslateUi(Widget);
 
@@ -106,6 +114,8 @@ public:
         pushButton_11->setText(QCoreApplication::translate("Widget", "\345\274\200\345\247\213\346\235\241\345\270\246\346\270\205\346\211\253", nullptr));
         pushButton_12->setText(QCoreApplication::translate("Widget", "\345\274\200\345\247\213\346\262\277\350\276\271\346\270\205\346\211\253", nullptr));
         pushButton_13->setText(QCoreApplication::translate("Widget", "\345\274\200\345\247\213\345\274\223\345\275\242\346\270\205\346\211\253", nullptr));
+        pushButton_14->setText(QCoreApplication::translate("Widget", "\345\220\257\345\212\250\346\221\204\345\203\217\345\244\264", nullptr));
+        pushButton_15->setText(QCoreApplication::translate("Widget", "\345\220\257\345\212\250rosbridge", nullptr));
     } // retranslateUi
 
 };

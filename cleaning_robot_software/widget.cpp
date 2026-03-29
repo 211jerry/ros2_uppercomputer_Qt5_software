@@ -15,6 +15,7 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
     myProcess = new QProcess(this);
 
+    // 按钮-槽函数连接（按功能序号排序）
     connect(ui->pushButton,    &QPushButton::clicked, this, &Widget::startBringup);
     connect(ui->pushButton_2,  &QPushButton::clicked, this, &Widget::stopRemoteProgram);
     connect(ui->pushButton_3,  &QPushButton::clicked, this, &Widget::startSLAM);
@@ -24,9 +25,11 @@ Widget::Widget(QWidget *parent)
     connect(ui->pushButton_7,  &QPushButton::clicked, this, &Widget::startCleaning);
     connect(ui->pushButton_8,  &QPushButton::clicked, this, &Widget::stopCleaning);
     connect(ui->pushButton_9,  &QPushButton::clicked, this, &Widget::startFullCoverage);
-    connect(ui->pushButton_11, &QPushButton::clicked, this, &Widget::startLineSweeping);    // 条带清扫
-    connect(ui->pushButton_12, &QPushButton::clicked, this, &Widget::startAlongEdgeSweeping);// 沿边清扫
-    connect(ui->pushButton_13, &QPushButton::clicked, this, &Widget::startArchSweeping);     // 弓形清扫
+    connect(ui->pushButton_11, &QPushButton::clicked, this, &Widget::startLineSweeping);
+    connect(ui->pushButton_12, &QPushButton::clicked, this, &Widget::startAlongEdgeSweeping);
+    connect(ui->pushButton_13, &QPushButton::clicked, this, &Widget::startArchSweeping);
+    connect(ui->pushButton_14, &QPushButton::clicked, this, &Widget::startCamera);
+    connect(ui->pushButton_15, &QPushButton::clicked, this, &Widget::startRosBridge);
     connect(ui->pushButton_10, &QPushButton::clicked, this, &Widget::openRviz2);
 }
 
@@ -143,12 +146,11 @@ void Widget::startFullCoverage()
     ui->label->setText("状态：✅ 全覆盖清扫已启动！");
 }
 
-
 // ==================== 10. 开始条带清扫 ====================
 void Widget::startLineSweeping()
 {
     QString cmd = "ros2 run autosweeper_robot linesweeper";
-    runSSHInTerminal(cmd); // 弹出终端执行（类似全覆盖清扫）
+    runSSHInTerminal(cmd);
     ui->label->setText("状态：✅ 条带清扫已启动！");
 }
 
@@ -168,7 +170,23 @@ void Widget::startArchSweeping()
     ui->label->setText("状态：✅ 弓形清扫已启动！");
 }
 
-// ==================== 10. 打开 RViz2 ====================
+// ==================== 13. 启动摄像机 ====================
+void Widget::startCamera()
+{
+    QString cmd = "ros2 run camera_publisher camera_publisher";
+    runSSHInTerminal(cmd);
+    ui->label->setText("状态：✅ 摄像机已启动！");
+}
+
+// ==================== 14. 启动安卓服务器(rosbridge) ====================
+void Widget::startRosBridge()
+{
+    QString cmd = "ros2 launch rosbridge_server rosbridge_websocket_launch.xml port:=9090";
+    runSSHInTerminal(cmd);
+    ui->label->setText("状态：✅ 安卓服务器已启动！端口：9090");
+}
+
+// ==================== 15. 打开 RViz2 ====================
 void Widget::openRviz2()
 {
     QString program = "bash";
